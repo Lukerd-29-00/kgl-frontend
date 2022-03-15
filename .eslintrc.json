@@ -38,6 +38,7 @@
         ],
         "no-var": "error",
         "no-unreachable": "warn",
+        "no-useless-escape": "off",
         "@typescript-eslint/no-empty-function": 0
 
     }
