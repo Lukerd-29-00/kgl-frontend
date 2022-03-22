@@ -12,17 +12,14 @@ export default function Filters(props: FiltersProps): JSX.Element{
         //fetch the subjects according to the selected filters whenever the selected filters changes.
         const classes = new UnionSet<string>()
         for(const filter of filters.filters){
-            const filterClasses = props.filters.get(filter)
-            if(filterClasses === null || filterClasses === undefined){
-                throw Error(`Unknown filter ${filter}`)
-            }
+            const filterClasses = props.filters.get(filter) as Set<string>
             classes.union(filterClasses)
         }
         props.fetchCallback(classes)
     },[filters.filters])
     return <>
         {Array.from<string>(props.filters.keys()).map((value: string, i: number) => {
-            return <button className={value in filters.filters ? "filter-selected" : "filter-unselected"} key={i} onClick={() => {
+            return <button className={filters.filters.has(value) ? "filter-selected" : "filter-unselected"} key={i} onClick={() => {
                 if(filters.filters.has(value)){
                     filters.delete(value)
                 }else{

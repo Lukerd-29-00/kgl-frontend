@@ -5,7 +5,7 @@ import Overlay from "react-bootstrap/Overlay"
 import UriList from "./UriList"
 import ErrorBox from "./ErrorBox"
 interface SearchBarProps{
-    selectHandler: (str: string) => void
+    //selectHandler: (str: string) => void //WIP
     subjects: string[]
 }
 
@@ -35,7 +35,7 @@ export default function SearchBar(props: SearchBarProps): JSX.Element{
         }
     },[props.subjects,searchMatch])
     return <div ref={container}>
-        <input className="search-bar" onChange={(e: ChangeEvent<HTMLInputElement>) => {
+        <input data-testid="search-bar" className="search-bar" onChange={(e: ChangeEvent<HTMLInputElement>) => {
             e.preventDefault()
             if(e.target.value.match(validSearches)){
                 setError(null)

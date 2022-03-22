@@ -4,7 +4,13 @@ import "react-app-polyfill/stable"
 import React from "react"
 import "./App.css"
 import Dashboard from "./components/Dashboard"
-import {configSchema} from "./util/interfaces/Config"
+import Joi from "joi"
+
+const configSchema = Joi.object({
+    backend: Joi.string().uri().required(),
+    prefixes: Joi.object().pattern(Joi.string().required(), Joi.string().uri().required()),
+    filters: Joi.object().pattern(Joi.string().required(), Joi.array().items(Joi.alternatives(Joi.string().uri().required(),Joi.string().regex(/^[^:]*:.+$/).required())).unique())
+})
 
 interface AppProps{
     config: unknown
@@ -26,12 +32,8 @@ function App(props: AppProps) {
     for(const entry of Object.entries(config.filters)){
         filters.set(entry[0],new Set(entry[1]))
     }
-    const finalConfig = {
-        backend: new URL(config.backend),
-        prefixes: config.prefixes,
-        filters
-    }
-    return <Dashboard config={finalConfig}/>
+
+    return <Dashboard backend={new URL(config.backend)} prefixes={config.prefixes} filters={filters}/>
 }
 
 export default App
