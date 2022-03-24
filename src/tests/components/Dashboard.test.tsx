@@ -2,8 +2,6 @@ import { render, waitFor, queryByText, getByTestId, findByText, findByTestId, sc
 import Dashboard from "../../components/Dashboard"
 import config from "../defaultConfig.json"
 
-const mockFetch = jest.spyOn(global,"fetch")
-
 async function expectSubjects(...subjects: string[]): Promise<void>{
     screen.getByTestId("search-bar").click()
     await screen.findByText(subjects[0])
@@ -36,11 +34,8 @@ describe(Dashboard,() => {
     const prefixes = new Map<string,string>(Object.entries(config.prefixes))
     filters.set("test",new Set([testContent]))
     filters.set("test2",new Set([`${testContent}2`]))
-    beforeEach(() => {
-        mockFetch.mockReset()
-        window.sessionStorage.clear()
-    })
-    
+    const saveFetch = global.fetch
+    const mockFetch = jest.spyOn(global,"fetch")
     it("Should make a request to the /content endpoint of the supplied backend exaclty once when it first renders", async () => {
         setResolveValues(mockFetch,[testContent])
         mockFetch.mockRejectedValueOnce(undefined)
@@ -95,5 +90,12 @@ describe(Dashboard,() => {
         })
 
         await expectSubjects("testContent3","testContent4")
+    })
+    afterEach(() => {
+        mockFetch.mockReset()
+        window.sessionStorage.clear()
+    })
+    afterAll(() => {
+        global.fetch = saveFetch
     })
 })

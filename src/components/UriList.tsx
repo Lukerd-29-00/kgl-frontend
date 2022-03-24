@@ -5,11 +5,11 @@ interface UriListProps{
     uris: string[]
 }
 export default function UriList(props: UriListProps): JSX.Element{
-    return <Popover id="popover-positioned-bottom-start">
-        <PopoverBody>
+    return <Popover id="popover-basic">
+        <PopoverBody data-testid="uri-list">
             {props.uris.map((value,i) => {
                 return <div key={i}>
-                    <span>
+                    <span data-testid="uri">
                         {value}    
                     </span>
                 </div>

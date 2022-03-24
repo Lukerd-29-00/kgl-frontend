@@ -12,38 +12,24 @@ interface SearchBarProps{
 export default function SearchBar(props: SearchBarProps): JSX.Element{
     const [displayedSubjects, setDisplayedSubjects] = useState<string[]>([])
     const [error, setError] = useState<string | null>(null)
-    const [searchMatch, setSearchMatch] = useState<RegExp | null>(null)
+    const [searchMatch, setSearchMatch] = useState<RegExp>(() => new RegExp(""))
     const [show, setShow] = useState(false)
     const target = useRef(null)
     const container = useRef(null)
-    const validSearches = /^[^\*\[\]\(\)\^\$\?\\\+\{\}\!\|]*$/
     const invalidSearchChars = /([\*\[\]\(\)\^\$\?\\\+\{\}\!\|])/
     useEffect(() => {
-        if(props.subjects !== null && searchMatch !== null){
-            const matches = searchSubjects([...props.subjects],searchMatch)
-            if(matches.length > 0){
-                setDisplayedSubjects(matches)
-                setError(null)
-            }else{
-                setError("no matches")
-            }
-        }else if(props.subjects !== null){
-            setDisplayedSubjects([...props.subjects])
+        const matches = searchSubjects([...props.subjects],searchMatch)
+        if(matches.length > 0){
+            setDisplayedSubjects(matches)
             setError(null)
         }else{
-            setDisplayedSubjects([])
+            setError("no matches") //todo: configurable error messages (because this is going to be used in several languages)
         }
     },[props.subjects,searchMatch])
     return <div ref={container}>
         <input data-testid="search-bar" className="search-bar" onChange={(e: ChangeEvent<HTMLInputElement>) => {
             e.preventDefault()
-            if(e.target.value.match(validSearches)){
-                setError(null)
-                setSearchMatch(new RegExp(e.target.value))
-            }else{
-                const chr = e.target.value.match(invalidSearchChars)
-                setError(`'${(chr as RegExpMatchArray)[0]}' not allowed!`)
-            }
+            setSearchMatch(new RegExp(e.target.value.replace(invalidSearchChars,"\\$&")))
         }
         } ref={target}
         onClick={() => {
