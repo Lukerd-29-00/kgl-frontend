@@ -29,6 +29,7 @@ function QueueReducer(state: State, action: QueueAction | null): State{
 interface RequestQueue<T>{
     queueRequest: (req: Promise<T>) => void
     value: T | null
+    empty: boolean
 }
 
 function init(): State{
@@ -47,6 +48,6 @@ export default function useRequestQueue<T>(): RequestQueue<T>{
         }
         queue[1]({action: queuedReq})
     }
-    return {value, queueRequest}
+    return {value, queueRequest, empty: queue[0].queue.length === 0}
 }
 

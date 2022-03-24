@@ -1,11 +1,13 @@
+import React, {ForwardedRef, forwardRef} from "react"
+import { OverlayInjectedProps } from "react-bootstrap/esm/Overlay"
 import Popover  from "react-bootstrap/Popover"
 import PopoverBody from "react-bootstrap/PopoverBody"
 
-interface UriListProps{
+interface UriListProps extends OverlayInjectedProps{
     uris: string[]
 }
-export default function UriList(props: UriListProps): JSX.Element{
-    return <Popover id="popover-basic">
+const UriList = forwardRef((props: UriListProps, ref: ForwardedRef<HTMLDivElement>) => {
+    return <Popover id="popover-basic" {...props} ref={ref} data-testid="uri-list-pop">
         <PopoverBody data-testid="uri-list">
             {props.uris.map((value,i) => {
                 return <div key={i}>
@@ -13,9 +15,10 @@ export default function UriList(props: UriListProps): JSX.Element{
                         {value}    
                     </span>
                 </div>
-                    
-                
             })}
         </PopoverBody>
     </Popover>
-}
+})
+
+UriList.displayName = "UriList"
+export default UriList

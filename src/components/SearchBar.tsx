@@ -7,6 +7,7 @@ import ErrorBox from "./ErrorBox"
 interface SearchBarProps{
     //selectHandler: (str: string) => void //WIP
     subjects: string[]
+    loading: boolean
 }
 
 export default function SearchBar(props: SearchBarProps): JSX.Element{
@@ -36,12 +37,13 @@ export default function SearchBar(props: SearchBarProps): JSX.Element{
             setShow(true)
         }} placeholder="enter subject IRI">
         </input>
-        <Overlay container={container.current} transition={true} placement={"bottom-start"} target={target.current} show={show} rootClose={true} onHide={() => {
+        <Overlay placement={"bottom-start"} target={target.current} show={show} rootClose={true} onHide={() => {
             setShow(false)
         }}>
-            <div>
-                {error === null ? <UriList uris={displayedSubjects}/> : <ErrorBox message={error}/>}
-            </div>
+            {innerProps => (
+                <div>
+                    {props.loading ? "loading..." : error === null ? <UriList uris={displayedSubjects} {...innerProps}/> : <ErrorBox message={error}/>}
+                </div>)}
         </Overlay>
     </div>
 }

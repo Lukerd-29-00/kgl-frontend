@@ -90,7 +90,7 @@ export default function Dashboard(props: DashboardProps): JSX.Element{
                     <Filters filters={props.filters} fetchCallback={handleFilterChange}/>
                 </Col>
                 <Col>
-                    <SearchBar subjects={subjectsQueue.value}/>
+                    <SearchBar subjects={subjectsQueue.value} loading={!subjectsQueue.empty}/>
                 </Col>
             </Row>
             <Row>
