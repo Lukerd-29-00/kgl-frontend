@@ -7,6 +7,7 @@ import Col from "react-bootstrap/Col"
 import Filters from "./Filters"
 import useActiveRequests from "../hooks/useRequestQueue"
 import UnionSet from "../util/UnionSet"
+import Tree from "./Tree"
 
 interface DashboardProps{
     backend: URL,
@@ -24,9 +25,7 @@ async function fetchSubjects(url: URL): Promise<Array<string>>{
         })).error
     }
     if(error === undefined){
-        return (data as string[]).map((value) => {
-            return (value.match(/\/([^\/]+)$/) as RegExpMatchArray)[1]
-        })
+        return data as string[]
     }else{
         throw Error(error.message)
     }
@@ -76,6 +75,7 @@ async function getSubjects(url: URL, classes?: Set<string>): Promise<string[]>{
 }
 
 export default function Dashboard(props: DashboardProps): JSX.Element{
+    const [target, setTarget] = useState<string | null>(null)
     const subjectsQueue = useActiveRequests<string[]>()
     useEffect(() => {
         subjectsQueue.queueRequest(getSubjects(props.backend))
@@ -90,10 +90,11 @@ export default function Dashboard(props: DashboardProps): JSX.Element{
                     <Filters filters={props.filters} fetchCallback={handleFilterChange}/>
                 </Col>
                 <Col>
-                    <SearchBar subjects={subjectsQueue.value} loading={!subjectsQueue.empty}/>
+                    <SearchBar subjects={subjectsQueue.value} loading={!subjectsQueue.empty} setTarget={setTarget}/>
                 </Col>
             </Row>
             <Row>
+                <Tree target={target} depth={3}/>
             </Row>
         </Container>
     }else{

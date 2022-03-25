@@ -1,0 +1,22 @@
+#outer-tree{
+    background-color:antiquewhite;
+    display: flexbox; 
+    overflow: hidden;
+    height: 125%;
+    width: 125%;
+}
+#inner-tree{
+    position: absolute;
+    background-color: inherit;
+    display: flexbox;
+    overflow: hidden;
+    flex-direction: column;
+    position: relative;
+    justify-content: flex-end
+}
+#inner-tree > span{
+    text-align: center;
+}
+.container .treeBox{
+    
+}

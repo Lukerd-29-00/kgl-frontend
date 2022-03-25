@@ -5,7 +5,7 @@ import Overlay from "react-bootstrap/Overlay"
 import UriList from "./UriList"
 import ErrorBox from "./ErrorBox"
 interface SearchBarProps{
-    //selectHandler: (str: string) => void //WIP
+    setTarget: (target: string) => void
     subjects: string[]
     loading: boolean
 }
@@ -35,14 +35,14 @@ export default function SearchBar(props: SearchBarProps): JSX.Element{
         } ref={target}
         onClick={() => {
             setShow(true)
-        }} placeholder="enter subject IRI">
+        }} placeholder="search subjects">
         </input>
         <Overlay placement={"bottom-start"} target={target.current} show={show} rootClose={true} onHide={() => {
             setShow(false)
         }}>
             {innerProps => (
                 <div>
-                    {props.loading ? "loading..." : error === null ? <UriList uris={displayedSubjects} {...innerProps}/> : <ErrorBox message={error}/>}
+                    {props.loading ? "loading..." : error === null ? <UriList uris={displayedSubjects} setTarget={props.setTarget} {...innerProps}/> : <ErrorBox message={error}/>}
                 </div>)}
         </Overlay>
     </div>
