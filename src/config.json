@@ -1,0 +1,10 @@
+{
+    "filters": {
+        "words": ["cco:Morpheme"]
+    },
+    "prefixes": {
+        "cco": "http://www.ontologyrepository.com/CommonCoreOntologies/",
+        "owl": "http://www.w3.org/2002/07/owl#"
+    },
+    "backend": "http://localhost:4000"
+}
